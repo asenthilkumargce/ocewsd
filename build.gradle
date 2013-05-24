@@ -1,0 +1,128 @@
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'jetty'
+
+def springVersion = "3.2.2.RELEASE"
+def jaxWSVersion = "2.2.7"
+def generatedWSDL = "$buildDir/wsdl"
+def generatedClientSrcArtifacts = "$buildDir/client/source"
+def generatedClientArtifacts = "$buildDir/client/classes"
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	jaxws
+}
+
+task wsgen(dependsOn: JavaPlugin.PROCESS_RESOURCES_TASK_NAME) {
+	doLast{
+		new File(generatedWSDL).mkdirs();
+		ant {
+			taskdef(name: 'wsgen',
+					classname: 'com.sun.tools.ws.ant.WsGen',
+					classpath: configurations.jaxws.asPath)
+				wsgen(sei: 'services.tman.src.tmta.reports.TMTAReportWebServiceImpl',
+					  keep: 'true',
+					  verbose: 'true',
+					  cp: sourceSets.main.output.classesDir,
+					  destdir: sourceSets.main.output.classesDir,
+					  sourcedestdir: 'src/main/java',
+					  resourcedestdir: generatedWSDL,
+					  genwsdl: 'true')
+		}
+	}
+}
+
+task wsimport(dependsOn: JavaPlugin.PROCESS_RESOURCES_TASK_NAME)  {	
+	doLast{
+		new File(generatedClientArtifacts).mkdirs();
+		new File(generatedClientSrcArtifacts).mkdirs();
+		ant {
+			taskdef(name: 'wsimport',
+					classname: 'com.sun.tools.ws.ant.WsImport',
+					classpath: configurations.jaxws.asPath)
+				wsimport(keep: 'true',
+						 verbose: 'true',
+						 destdir: generatedClientArtifacts,
+						 package: 'services.tman.src.tmta.reports.jaxws.client',
+						 sourcedestdir: generatedClientSrcArtifacts,
+						 wsdl: generatedWSDL,
+						 wsdllocation: 'http://localhost:8080/tman-online/tmta')
+		}
+	}
+}
+
+task jarClient(type: Jar) {
+	from generatedClientArtifacts
+	baseName = 'tman-online-client'
+}
+
+task jarClientSrc(type: Jar) {
+	from generatedClientSrcArtifacts
+	baseName = 'tman-online-client-sources'
+}
+
+dependencies {
+	testCompile "junit:junit:4.+"
+	testCompile "org.mockito:mockito-all:1.9.5"
+	
+	compile "log4j:log4j:1.2.16"
+	compile "org.slf4j:slf4j-api:1.7.2"
+	compile "org.slf4j:slf4j-log4j12:1.7.2"
+	
+	compile "org.springframework:spring-core:$springVersion"
+	compile "org.springframework:spring-context:$springVersion"
+	compile "org.springframework:spring-jdbc:$springVersion"
+	compile "org.springframework:spring-web:$springVersion"
+	
+	jaxws "com.sun.xml.ws:jaxws-rt:$jaxWSVersion"
+	
+	runtime("org.jvnet.jax-ws-commons.spring:jaxws-spring:1.8") {
+		exclude group: 'org.springframework', module: 'spring'
+		exclude group: 'org.springframework', module: 'spring-core'
+		exclude group: 'org.springframework', module: 'spring-context'
+		exclude group: 'javax.servlet', module: 'servlet-api'
+		exclude group: 'com.sun.xml.ws', module: 'jaxws-rt'
+		exclude group: 'com.sun.xml.bind', module: 'jaxb-impl'
+		exclude group: 'org.jvnet.staxex', module: 'stax-ex'
+		exclude group: 'com.sun.xml.stream.buffer', module: 'streambuffer'
+		exclude group: 'javax.xml.soap', module: 'saaj-api'
+		exclude group: 'com.sun.xml.messaging.saaj', module: 'saaj-impl'
+		exclude group: 'javax.jws', module: 'jsr181-api'
+		exclude group: 'javax.activation', module: 'activation'
+	}
+	
+	jaxws "com.sun.xml.ws:jaxws-tools:$jaxWSVersion"
+}
+
+war {
+	classpath configurations.jaxws
+}
+eclipse {
+	classpath {
+		plusConfigurations += configurations.jaxws
+	}
+}
+
+jettyRun {
+	classpath += configurations.jaxws
+}
+
+task wrapper(type: Wrapper) {
+	description = 'Generates gradlew[.bat] scripts'
+    gradleVersion = '1.4'
+}
+
+jettyRun {
+    contextPath = "/tman-online"
+}
+
+task initProject () << {
+	project.apply { plugin('war') }
+
+	project.sourceSets*.allSource.srcDirTrees.flatten().dir.each { dir ->
+		dir.mkdirs()
+	}
+}

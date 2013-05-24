@@ -236,3 +236,17 @@ Client-Response-Num: 1
    ```
    
 5. Invoke exposed methods by the web service.
+
+#### Design Patterns of Web Services
+
+* message exchange pattern (MEP) - request/response
+* one-way pattern - clients can send request but do not expect a response
+* notification pattern - allows, for example, a web service to spread 
+  information to other web services, without prior knowledge of those web services.
+* solicit/response pattern - ask a subscribing client whether the client wishes to 
+  continue receiving notifications
+
+
+
+
+
