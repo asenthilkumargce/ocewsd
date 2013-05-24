@@ -30,7 +30,7 @@ preserves but also significantly extends the capabilities of JAX-RPC.
 * The interface is called the *SEI*: Service Endpoint Interface
 * The implementation is called the *SIB*: Service Implementation Bean. The SIB can be either a POJO or a Stateless Session EJB (Enterprise Java Bean).
 
-### Testing the Web Service with a Browser
+#### Testing the Web Service with a Browser
 
 The browser is opened to a URL that has
 two parts. The first part is the URL published in the Java *TimeServerPublisher* application:
@@ -102,8 +102,16 @@ upper-, lower-, or mixed case. The result is *http://127.0.0.1:9876/ts?wsdl*.
 </definitions>
 ```
 
+* *portType* - groups the operations that the web service delivers, in this case the operations 
+getTimeAsString and getTimeAsElapsed. WSDL portType is like a Java interface in that the portType 
+presents the service operations
+abstractly but provides no implementation detail
+* *service* - Service Location (*http://localhost:9876/ts*). The URL is called the service endpoint and it
+informs clients about where the service can be accessed.
+
 #### Core Java 6, JAX-WS, and Metro
 
+```
 Java SE 6 ships with JAX-WS. However, JAX-WS has a life outside of core Java 6 and
 a separate development team. The bleeding edge of JAX-WS is the Metro Web Services
 Stack (https://wsit.dev.java.net), which includes Project Tango to promote interoperability
@@ -118,3 +126,4 @@ The Metro home page provides an easy download. Once installed, the Metro release
 resides in a directory named jaxws-ri. Subsequent examples that use the Metro release
 assume an environment variable METRO_HOME, whose value is the install directory for
 *jaxws-ri*. The *ri*, by the way, is short for *reference implementation*.
+```
