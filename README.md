@@ -206,25 +206,33 @@ Client-Response-Num: 1
 
 #### A Java Requester of the Web Service
 
-1.	Create a URL object with the URL of the WSDL.
-```java
-URL url = new URL("http://localhost:9876/ts?wsdl");
-```
-2.	Create a XML qualified name
-(QName.class) - *namespace URI:local name*
-	* The namespace URI is provided in the WSDL
-	* the local name is the SIB class name TimeServerImpl with the word Service appended. 
-	The local name occurs in the service section, the last section of the WSDL document.
+1. Create a URL object with the URL of the WSDL.
+
+   ```java
+   URL url = new URL("http://localhost:9876/ts?wsdl");
+   ```
+   
+2. Create a XML qualified name
+
+   XML qualified name (QName.class) - *namespace URI:local name*
+   * The namespace URI is provided in the WSDL
+   * the local name is the SIB class name TimeServerImpl with the word Service appended. 
+   The local name occurs in the service section, the last section of the WSDL document.
 	
-```java
-QName qname = new QName("http://firstexample.ch01.webservice.cognoscenti.org/", "TimeServerImplService");
-```
-3.	Create a factory for the service and supply the url and qname
-```java
-Service service = Service.create(url, qname);
-```
-4.	Extract the endpoint interface, the service "port".
-```java
-TimeServer eif = service.getPort(TimeServer.class);
-```
-5.	Invoke exposed methods by the web service.
+   ```java
+   QName qname = new QName("http://firstexample.ch01.webservice.cognoscenti.org/", "TimeServerImplService");
+   ```
+   
+3. Create a factory for the service and supply the url and qname
+
+   ```java
+   Service service = Service.create(url, qname);
+   ```
+   
+4. Extract the endpoint interface, the service "port".
+
+   ```java
+   TimeServer eif = service.getPort(TimeServer.class);
+   ```
+   
+5. Invoke exposed methods by the web service.
