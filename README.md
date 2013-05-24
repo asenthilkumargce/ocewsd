@@ -37,7 +37,7 @@ two parts. The first part is the URL published in the Java *TimeServerPublisher*
 *http://127.0.0.1:9876/ts*. Appended to this URL is the query string *?wsdl* in
 upper-, lower-, or mixed case. The result is *http://127.0.0.1:9876/ts?wsdl*.
 
-`<?xml version="1.0" encoding="UTF-8"?>
+'<?xml version="1.0" encoding="UTF-8"?>
 <definitions
 		xmlns="http://schemas.xmlsoap.org/wsdl/"
 		xmlns:tns="http://ts.ch01/"
@@ -98,7 +98,7 @@ upper-, lower-, or mixed case. The result is *http://127.0.0.1:9876/ts?wsdl*.
 			<soap:address location="http://localhost:9876/ts"></soap:address>
 		</port>
 	</service>
-</definitions>`
+</definitions>'
 
 #### Core Java 6, JAX-WS, and Metro
 
