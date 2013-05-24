@@ -98,7 +98,7 @@ upper-, lower-, or mixed case. The result is *http://127.0.0.1:9876/ts?wsdl*.
 			<soap:address location="http://localhost:9876/ts"></soap:address>
 		</port>
 	</service>
-</definitions><pre>
+</definitions></pre>
 
 #### Core Java 6, JAX-WS, and Metro
 
