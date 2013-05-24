@@ -28,7 +28,7 @@ which is a bit confusing because version 1.x has a different label: JAX-RPC. JAX
 preserves but also significantly extends the capabilities of JAX-RPC.
 
 * The interface is called the *SEI*: Service Endpoint Interface
-* The implementation is called the SIB: Service Implementation Bean. The SIB can be either a POJO or a Stateless Session EJB (Enterprise Java Bean).
+* The implementation is called the *SIB*: Service Implementation Bean. The SIB can be either a POJO or a Stateless Session EJB (Enterprise Java Bean).
 
 ### Testing the Web Service with a Browser
 
@@ -37,7 +37,7 @@ two parts. The first part is the URL published in the Java *TimeServerPublisher*
 *http://127.0.0.1:9876/ts*. Appended to this URL is the query string *?wsdl* in
 upper-, lower-, or mixed case. The result is *http://127.0.0.1:9876/ts?wsdl*.
 
-'''<?xml version="1.0" encoding="UTF-8"?>
+<pre><?xml version="1.0" encoding="UTF-8"?>
 <definitions
 		xmlns="http://schemas.xmlsoap.org/wsdl/"
 		xmlns:tns="http://ts.ch01/"
@@ -98,7 +98,7 @@ upper-, lower-, or mixed case. The result is *http://127.0.0.1:9876/ts?wsdl*.
 			<soap:address location="http://localhost:9876/ts"></soap:address>
 		</port>
 	</service>
-</definitions>'''
+</definitions><pre>
 
 #### Core Java 6, JAX-WS, and Metro
 
