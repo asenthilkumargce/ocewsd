@@ -9,4 +9,4 @@
 * *SOAP*-based - Simple Object Access Protocol / Service Oriented Architecture (SOA) Protocol
 * *REST*-style - 
 
-![Architecture of a typical SOAP-based web service](/tree/master/images/Fig.1-1.jpg)
+![Architecture of a typical SOAP-based web service](https://raw.github.com/gengstah/ocewsd/master/images/Fig.1-1.JPG)
