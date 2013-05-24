@@ -206,7 +206,7 @@ Client-Response-Num: 1
 
 #### A Java Requester of the Web Service
 
-1. Create a URL object with the URL of the WSDL.
+1.	Create a URL object with the URL of the WSDL.
 
 as in
 
@@ -214,7 +214,7 @@ as in
 URL url = new URL("http://localhost:9876/ts?wsdl");
 ```
 
-2. Create a XML qualified name
+2.	Create a XML qualified name
 
 XML qualified name (QName.class) - *namespace URI:local name*
 	* The namespace URI is provided in the WSDL
@@ -227,7 +227,7 @@ as in
 QName qname = new QName("http://firstexample.ch01.webservice.cognoscenti.org/", "TimeServerImplService");
 ```
 
-3. Create a factory for the service and supply the url and qname
+3.	Create a factory for the service and supply the url and qname
 
 as in 
 
@@ -235,7 +235,7 @@ as in
 Service service = Service.create(url, qname);
 ```
 
-4. Extract the endpoint interface, the service "port".
+4.	Extract the endpoint interface, the service "port".
 
 as in
 
@@ -243,4 +243,4 @@ as in
 TimeServer eif = service.getPort(TimeServer.class);
 ```
 
-5. Invoke exposed methods with the web service.
+5.	Invoke exposed methods with the web service.
