@@ -39,64 +39,65 @@ upper-, lower-, or mixed case. The result is *http://127.0.0.1:9876/ts?wsdl*.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions
-		xmlns="http://schemas.xmlsoap.org/wsdl/"
-		xmlns:tns="http://ts.ch01/"
-		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-		xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-		targetNamespace="http://ts.ch01/"
-		name="TimeServerImplService">
+	<definitions 
+			xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
+			xmlns:wsp="http://www.w3.org/ns/ws-policy" 
+			xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" 
+			xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" 
+			xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+			xmlns:tns="http://firstexample.ch01.webservice.cognoscenti.org/" 
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+			xmlns="http://schemas.xmlsoap.org/wsdl/" 
+			targetNamespace="http://firstexample.ch01.webservice.cognoscenti.org/" 
+			name="TimeServerImplService">
+			
+	<types/>
 	
-	<types></types>
-
-	<message name="getTimeAsString"></message>
+	<message name="getTimeAsString"/>
 	<message name="getTimeAsStringResponse">
-		<part name="return" type="xsd:string"></part>
+		<part name="return" type="xsd:string"/>
 	</message>
-	<message name="getTimeAsElapsed"></message>
+	<message name="getTimeAsElapsed"/>
 	<message name="getTimeAsElapsedResponse">
-		<part name="return" type="xsd:long"></part>
+		<part name="return" type="xsd:long"/>
 	</message>
 	
 	<portType name="TimeServer">
-		<operation name="getTimeAsString" parameterOrder="">
-			<input message="tns:getTimeAsString"></input>
-			<output message="tns:getTimeAsStringResponse"></output>
+		<operation name="getTimeAsString">
+			<input wsam:Action="http://firstexample.ch01.webservice.cognoscenti.org/TimeServer/getTimeAsStringRequest" message="tns:getTimeAsString"/>
+			<output wsam:Action="http://firstexample.ch01.webservice.cognoscenti.org/TimeServer/getTimeAsStringResponse" message="tns:getTimeAsStringResponse"/>
 		</operation>
-		
-		<operation name="getTimeAsElapsed" parameterOrder="">
-			<input message="tns:getTimeAsElapsed"></input>
-			<output message="tns:getTimeAsElapsedResponse"></output>
+		<operation name="getTimeAsElapsed">
+			<input wsam:Action="http://firstexample.ch01.webservice.cognoscenti.org/TimeServer/getTimeAsElapsedRequest" message="tns:getTimeAsElapsed"/>
+			<output wsam:Action="http://firstexample.ch01.webservice.cognoscenti.org/TimeServer/getTimeAsElapsedResponse" message="tns:getTimeAsElapsedResponse"/>
 		</operation>
 	</portType>
 	
 	<binding name="TimeServerImplPortBinding" type="tns:TimeServer">
-		<soap:binding style="rpc"
-				transport="http://schemas.xmlsoap.org/soap/http">
-		</soap:binding>
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
 		<operation name="getTimeAsString">
-			<soap:operation soapAction=""></soap:operation>
+			<soap:operation soapAction=""/>
 			<input>
-				<soap:body use="literal" namespace="http://ts.ch01/"></soap:body>
+				<soap:body use="literal" namespace="http://firstexample.ch01.webservice.cognoscenti.org/"/>
 			</input>
 			<output>
-				<soap:body use="literal" namespace="http://ts.ch01/"></soap:body>
+				<soap:body use="literal" namespace="http://firstexample.ch01.webservice.cognoscenti.org/"/>
 			</output>
 		</operation>
 		<operation name="getTimeAsElapsed">
-			<soap:operation soapAction=""></soap:operation>
+			<soap:operation soapAction=""/>
 			<input>
-				<soap:body use="literal" namespace="http://ts.ch01/"></soap:body>
+				<soap:body use="literal" namespace="http://firstexample.ch01.webservice.cognoscenti.org/"/>
 			</input>
 			<output>
-				<soap:body use="literal" namespace="http://ts.ch01/"></soap:body>
+				<soap:body use="literal" namespace="http://firstexample.ch01.webservice.cognoscenti.org/"/>
 			</output>
 		</operation>
 	</binding>
 	
 	<service name="TimeServerImplService">
 		<port name="TimeServerImplPort" binding="tns:TimeServerImplPortBinding">
-			<soap:address location="http://localhost:9876/ts"></soap:address>
+			<soap:address location="http://localhost:9876/ts"/>
 		</port>
 	</service>
 </definitions>
@@ -126,4 +127,79 @@ The Metro home page provides an easy download. Once installed, the Metro release
 resides in a directory named jaxws-ri. Subsequent examples that use the Metro release
 assume an environment variable METRO_HOME, whose value is the install directory for
 *jaxws-ri*. The *ri*, by the way, is short for *reference implementation*.
+```
+
+#### The Hidden SOAP
+
+###### HTTP Request
+
+```xml
+POST http://localhost:9876/ts HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 254
+Host: localhost:9876
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope 
+		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+		xmlns:tns="http://firstexample.ch01.webservice.cognoscenti.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tns:getTimeAsElapsed/>
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+* The HTTP start line comes first and specifies the request method, in this case the
+POST method, which is typical of requests for dynamic resources such as web
+services or other web application code (for example, a Java servlet) as opposed to
+requests for a static HTML page. In this case, a POST rather than a GET request
+is needed because only a POST request has a body, which encapsulates the SOAP
+message. Next comes the request URL followed by the HTTP version, in this case
+1.1, that the requester understands. HTTP 1.1 is the current version.
+
+* Next come the HTTP *headers*, which are key/value pairs in which a colon (:) separates
+the key from the value. The order of the key/value pairs is arbitrary. The key
+Accept occurs three times, with a MIME (Multiple Internet Mail Extension) type/
+subtype as the value: text/xml, multipart/*, and application/soap. These three
+pairs signal that the requester is ready to accept an arbitrary XML response, a
+response with arbitrarily many attachments of any type (a SOAP message can have
+arbitrarily many attachments), and a SOAP document, respectively. The HTTP key
+SOAPAction is often present in the HTTP header of a web service request and the
+key’s value may be the empty string, as in this case; but the value also might be the
+name of the requested web service operation.
+
+* Two CRLF (Carriage Return Line Feed) characters, which correspond to two Java
+\n characters, separate the HTTP headers from the HTTP body, which is required
+for the POST verb but may be empty. In this case, the HTTP body contains the
+SOAP document, commonly called the SOAP envelope because the outermost or
+document element is named Envelope. In this SOAP envelope, the SOAP body contains
+a single element whose local name is getTimeAsString, which is the name of
+the web service operation that the client wants to invoke. The SOAP request envelope
+is simple in this example because the requested operation takes no
+arguments.
+
+###### HTTP Response
+
+```xml
+HTTP/1.1 200 OK
+Content-Length: 323
+Content-Type: text/xml; charset=utf-8
+Client-Date: Mon, 28 Apr 2008 02:12:54 GMT
+Client-Peer: 127.0.0.1:9876
+Client-Response-Num: 1
+
+<?xml version="1.0" ?>
+<soapenv:Envelope
+		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<soapenv:Body>
+		<ans:getTimeAsStringResponse xmlns:ans="http://firstexample.ch01.webservice.cognoscenti.org/">
+			<return>Mon Apr 28 14:12:54 CST 2008</return>
+		</ans:getTimeAsStringResponse>
+	</soapenv:Body>
+</soapenv:Envelope>
 ```
