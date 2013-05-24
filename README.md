@@ -203,3 +203,15 @@ Client-Response-Num: 1
 	</soapenv:Body>
 </soapenv:Envelope>
 ```
+
+#### A Java Requester of the Web Service
+
+XML qualified name (QName.class) - *namespace URI:local name*
+* The namespace URI is provided in the WSDL
+* the local name is the SIB class name TimeServerImpl with the word Service appended
+
+as in
+
+```java
+QName qname = new QName("http://ts.ch01/", "TimeServerImplService");
+```
